@@ -6,5 +6,5 @@ class LLMService(ABC):
        pass
 
     @abstractmethod
-    def query(self, text):
+    def query(self, model, text):
       pass

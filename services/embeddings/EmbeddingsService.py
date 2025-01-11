@@ -6,5 +6,5 @@ class EmeddingsService(ABC):
         pass
 
     @abstractmethod
-    def embed(self, text):
+    def embed(self, model, text):
         pass
