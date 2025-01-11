@@ -14,7 +14,7 @@ def start(args):
     llm_service = llm_factory.getLLM(args.query_llm, query_api_key)
     query_model = args.query_model
 
-    llm_supported_model = llm_service.validateModel(query_model)
+    llm_supported_model = llm_service.validate_model(query_model)
 
     if llm_supported_model == False:
         raise TypeError(f"{args.query_model} is not a valid query model for {args.query_llm}")
@@ -24,7 +24,7 @@ def start(args):
     embeddings_service = embeddings_factory.getEmbeddings(args.embeddings_llm, embeddings_api_key)
     embeddings_model = args.embeddings_model
 
-    embeddings_supported_model = embeddings_service.validateEmbeddings(embeddings_model)
+    embeddings_supported_model = embeddings_service.validate_embeddings(embeddings_model)
 
     if embeddings_supported_model == False:
         raise TypeError(f"{args.embeddings_model} is not a valid embeddings model for {args.embeddings_llm}")

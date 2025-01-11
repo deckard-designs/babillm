@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class LLMService(ABC):
     @abstractmethod
-    def validateModel(self, model):
+    def validate_model(self, model):
        pass
 
     @abstractmethod

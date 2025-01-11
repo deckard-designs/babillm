@@ -5,9 +5,9 @@ from services.llms import LLMService
 class OpenAIService(LLMService):
     def __init__(self, api_key):
         self._valid_models = ["gpt-3.5 turbo"]
-        self.service = OpenAI(api_key)
+        self.service = OpenAI(api_key=api_key)
 
-    def validateModel(self, model):
+    def validate_model(self, model):
         return model.lower() in self._valid_models
     
     def query(self, model, text):

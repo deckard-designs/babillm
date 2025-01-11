@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class EmeddingsService(ABC):
     @abstractmethod
-    def validateEmbeddings(self, model):
+    def validate_embeddings(self, model):
         pass
 
     @abstractmethod
