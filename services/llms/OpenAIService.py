@@ -1,4 +1,6 @@
-class OpenAIService:
+from services.llms import LLMService
+
+class OpenAIService(LLMService):
     def __init__(self):
         self._valid_models = ["gpt-3.5 turbo"]
 

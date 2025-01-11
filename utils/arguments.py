@@ -8,9 +8,13 @@ def getArgumentParser(command):
                             help="A file containing test data is required to generate an LLM baseline")
         parser.add_argument("-o", "--output", dest="output",
                             help="An output location is required for the baseline data")
-        parser.add_argument("-llm", dest="llm",
-                            help="An llm is required that you would like to generate a baseline for")
-        parser.add_argument("-m", '--model', dest="model",
-                            help="The model that for the llm that you would like to generate a baseline for")
+        parser.add_argument("-ellm", dest="embeddings_llm",
+                            help="An llm is required that you would like to use to generate embeddings")
+        parser.add_argument("-em", dest="embeddings_model",
+                            help="An model is required that you would like to use to generate embeddings")
+        parser.add_argument("-qllm", dest="query_llm",
+                            help="An llm is required that you would like to generate a baseline queries for")
+        parser.add_argument("-qm", '--model', dest="query_model",
+                            help="The model that for the llm that you would like to generate a baseline queries for")
 
         return parser
