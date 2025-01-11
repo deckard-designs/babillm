@@ -3,7 +3,7 @@ name = "babillm"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "gsareth@deckarddesigns.com"}
+    {name = "gareth@deckarddesigns.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13,<4"

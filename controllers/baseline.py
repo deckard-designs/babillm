@@ -9,7 +9,9 @@ def start(args):
         
     baseline_schema.validate(data)
 
-    llm_service = llm_factory.getLLM(args.query_llm)
+    query_api_key = args.query_api_key
+
+    llm_service = llm_factory.getLLM(args.query_llm, query_api_key)
     query_model = args.query_model
 
     llm_supported_model = llm_service.validateModel(query_model)
@@ -17,7 +19,9 @@ def start(args):
     if llm_supported_model == False:
         raise TypeError(f"{args.query_model} is not a valid query model for {args.query_llm}")
     
-    embeddings_service = embeddings_factory.getEmbeddings(args.embeddings_llm)
+    embeddings_api_key = args.embeddings_api_key
+    
+    embeddings_service = embeddings_factory.getEmbeddings(args.embeddings_llm, embeddings_api_key)
     embeddings_model = args.embeddings_model
 
     embeddings_supported_model = embeddings_service.validateEmbeddings(embeddings_model)

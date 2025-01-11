@@ -18,7 +18,7 @@ def getArgumentParser(command):
                             help="An llm is required that you would like to use to generate embeddings")
         parser.add_argument("-em", dest="embeddings_model",
                             help="An model is required that you would like to use to generate embeddings")
-        parser.add_argument("-ekey", '--model', dest="query_api_key",
+        parser.add_argument("-ekey", '--model', dest="embeddings_api_key",
                             help="The api key for the llm you would like to use for embeddings")
 
         return parser
