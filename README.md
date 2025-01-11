@@ -1,0 +1,1 @@
+poetry run python3 app.py baseline -f ./test_data/test_data.json -llm openai -m GPT-3.5 Turbo
