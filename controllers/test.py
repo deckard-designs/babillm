@@ -52,9 +52,9 @@ def start(args):
         else:
            test_responses.append({
                 "query": query,
-                "status": "passed",
+                "status": "passed" if similarity >= args.success_threshold else "failed",
                 "response": response,
-                "similarity": round(similarity, 2)
+                "similarity": similarity
            })
            
     print(test_responses)
@@ -68,8 +68,8 @@ def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings
         response_vector = embeddings_service.embed(embeddings_model, response)
 
         similarity = vector_utils.cosine_similarity(baseline_test["vector"], response_vector)
-
-        return response, similarity
+           
+        return response, round(similarity, 2)
     else:
         raise TypeError("Cannot locate test data within baseline")
     
