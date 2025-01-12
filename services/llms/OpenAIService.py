@@ -4,7 +4,10 @@ from services.llms import LLMService
 
 class OpenAIService:
     def __init__(self, api_key):
-        self._valid_models = ["gpt-4o-mini"]
+        self._valid_models = [
+            "gpt-4o",
+            "gpt-4o-mini"
+        ]
         self.service = OpenAI(api_key=api_key)
 
     def validate_model(self, model):

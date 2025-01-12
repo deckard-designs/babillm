@@ -1,8 +1,10 @@
+import os
 import json
+from datetime import datetime
 
 from factories import embeddings_factory, llm_factory
 from schemas import baseline_schema, test_data_schema
-from utils import vector_utils
+from utils import file_utils, vector_utils
 
 def start(args):
     with open(args.baseline_filename, 'r') as file:
@@ -35,12 +37,14 @@ def start(args):
 
     for query in test_data:
         try:
-            response, similarity = _run_test(
+            response, similarity, status = _run_test(
                 test_llm_service, 
                 test_query_model, 
                 embeddings_service, 
-                embeddings_model,query, 
-                baseline_data
+                embeddings_model,
+                baseline_data,
+                query,
+                args.success_threshold
             )
         except TypeError as e:
             test_responses.append({
@@ -52,14 +56,19 @@ def start(args):
         else:
            test_responses.append({
                 "query": query,
-                "status": "passed" if similarity >= args.success_threshold else "failed",
+                "status": status,
                 "response": response,
                 "similarity": similarity
            })
            
-    print(test_responses)
+    _output_results(
+        test_query_llm, 
+        test_query_model,
+        test_responses,
+        args.output_directory
+    )
 
-def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings_model, query, baseline_data):
+def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings_model, baseline_data, query, success_threshold):
     baseline_test = _find_baseline_test(query, baseline_data["data"])
 
     if baseline_test != None:
@@ -69,7 +78,9 @@ def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings
 
         similarity = vector_utils.cosine_similarity(baseline_test["vector"], response_vector)
            
-        return response, round(similarity, 2)
+        test_status = "passed" if similarity >= success_threshold else "failed",
+
+        return response, round(similarity, 2), test_status
     else:
         raise TypeError("Cannot locate test data within baseline")
     
@@ -80,3 +91,11 @@ def _find_baseline_test(test_query, baseline_data):
             return data
       
     return None
+
+def _output_results(query_llm, query_model, test_results, output_directory):
+    output_file = f"{query_llm.lower()}_{query_model.lower()}__{str(datetime.now().timestamp())}.json"
+
+    output_full_path = os.path.join(output_directory, file_utils.str_to_safe_filename(output_file))
+
+    with open(output_full_path, "w") as file:
+        json.dump(test_results, file, indent=4)

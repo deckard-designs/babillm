@@ -54,7 +54,7 @@ def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_
     return baseline_data
 
 def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline, output_directory):
-    output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}_{str(datetime.now().timestamp())}.json"
+    output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}__{str(datetime.now().timestamp())}.json"
 
     output_full_path = os.path.join(output_directory, file_utils.str_to_safe_filename(output_file))
 
