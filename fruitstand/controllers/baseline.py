@@ -2,9 +2,9 @@ import json
 import os
 from datetime import datetime
 
-from schemas import generate_baseline_schema
-from factories import embeddings_factory, llm_factory
-from utils import file_utils
+from fruitstand.schemas import generate_baseline_schema
+from fruitstand.factories import embeddings_factory, llm_factory
+from fruitstand.utils import file_utils
 
 def start(args):
     with open(args.filename, 'r') as file:

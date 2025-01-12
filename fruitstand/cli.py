@@ -1,7 +1,7 @@
 import sys
 
-from utils import argument_utils
-from controllers import main
+from fruitstand.utils import argument_utils
+from fruitstand.controllers import main
 
 def start():
     command = sys.argv[1]

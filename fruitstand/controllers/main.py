@@ -1,4 +1,4 @@
-from controllers import baseline, test
+from fruitstand.controllers import baseline, test
 
 def start(command, args):
     normalized_command = command.lower()

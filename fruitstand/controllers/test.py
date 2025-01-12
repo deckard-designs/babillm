@@ -2,9 +2,9 @@ import os
 import json
 from datetime import datetime
 
-from factories import embeddings_factory, llm_factory
-from schemas import baseline_schema, test_data_schema
-from utils import file_utils, vector_utils
+from fruitstand.factories import embeddings_factory, llm_factory
+from fruitstand.schemas import baseline_schema, test_data_schema
+from fruitstand.utils import file_utils, vector_utils
 
 def start(args):
     with open(args.baseline_filename, 'r') as file:
@@ -46,11 +46,13 @@ def start(args):
                 query,
                 args.success_threshold
             )
+
+            print(response, similarity, status)
         except TypeError as e:
             test_responses.append({
                 "query": query,
                 "status": "failed",
-                "response": e,
+                "response": str(e),
                 "similarity": 0
             })
         else:
@@ -78,7 +80,10 @@ def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings
 
         similarity = vector_utils.cosine_similarity(baseline_test["vector"], response_vector)
            
-        test_status = "passed" if similarity >= success_threshold else "failed",
+        if similarity >= success_threshold:
+            test_status = "passed"
+        else:
+            test_status = "failed"
 
         return response, round(similarity, 2), test_status
     else:

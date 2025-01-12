@@ -1,4 +1,4 @@
-from services.embeddings.OpenAIEmbeddings import OpenAIEmbeddings
+from fruitstand.services.embeddings.OpenAIEmbeddings import OpenAIEmbeddings
 
 def getEmbeddings(llm, api_key):
     if (llm == "openai"):

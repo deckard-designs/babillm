@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from services.llms import LLMService
+from fruitstand.services.llms import LLMService
 
 class OpenAIService:
     def __init__(self, api_key):

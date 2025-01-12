@@ -1,4 +1,4 @@
-from services.llms.OpenAIService import OpenAIService
+from fruitstand.services.llms.OpenAIService import OpenAIService
 
 def getLLM(llm, api_key):
     if (llm == "openai"):
