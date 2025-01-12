@@ -145,8 +145,8 @@ def _find_baseline_test(test_query, baseline_data):
 
 def _output_results(query_llm, query_model, test_results, output_directory):
     # Generate output file name and path
-    output_file = f"{query_llm.lower()}_{query_model.lower()}__{str(datetime.now().timestamp())}.json"
-    output_full_path = os.path.join(output_directory, file_utils.str_to_safe_filename(output_file))
+    output_file = f"{query_llm.lower()}_{query_model.lower()}__{str(datetime.now().timestamp())}"
+    output_full_path = os.path.join(output_directory, f"{file_utils.str_to_safe_filename(output_file)}.json")
 
     # Write test results to the output file
     with open(output_full_path, "w") as file:
