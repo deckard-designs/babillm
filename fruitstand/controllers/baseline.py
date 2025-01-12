@@ -1,7 +1,7 @@
 import json
 import os
-from datetime import datetime
 import asyncio
+from datetime import datetime
 
 from fruitstand.schemas import generate_baseline_schema
 from fruitstand.factories import embeddings_factory, llm_factory

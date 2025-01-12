@@ -1,5 +1,6 @@
 import os
 import json
+import asyncio
 from datetime import datetime
 
 from fruitstand.factories import embeddings_factory, llm_factory
@@ -35,32 +36,15 @@ def start(args):
     if llm_supported_model == False:
         raise TypeError(f"{embeddings_model} is not a valid embeddings model for {embeddings_service}")
 
-    # Run tests for each query in test data
-    for query in test_data:
-        try:
-            response, similarity, status = _run_test(
-                test_llm_service, 
-                test_query_model, 
-                embeddings_service, 
-                embeddings_model,
-                baseline_data,
-                query,
-                args.success_threshold
-            )
-        except TypeError as e:
-            test_responses.append({
-                "query": query,
-                "status": "failed",
-                "response": str(e),
-                "similarity": 0
-            })
-        else:
-            test_responses.append({
-                "query": query,
-                "status": status,
-                "response": response,
-                "similarity": similarity
-            })
+    test_responses = asyncio.run(run_tests(
+        test_llm_service, 
+        test_query_model, 
+        embeddings_service, 
+        embeddings_model,
+        baseline_data,
+        test_data,
+        args.success_threshold
+    ))
            
     # Output test results
     _output_results(
@@ -69,6 +53,64 @@ def start(args):
         test_responses,
         args.output_directory
     )
+
+async def run_tests(
+    test_llm_service, 
+    test_query_model, 
+    embeddings_service, 
+    embeddings_model,
+    baseline_data,
+    test_data,
+    success_threshold
+):
+    # Run tests for each query in test data
+    test_results = [ _generate_test_results(
+        test_llm_service, 
+        test_query_model, 
+        embeddings_service, 
+        embeddings_model,
+        baseline_data,
+        query,
+        success_threshold
+    ) for query in test_data ]
+
+    return await asyncio.gather(*test_results)
+
+
+async def _generate_test_results(
+    test_llm_service, 
+    test_query_model, 
+    embeddings_service, 
+    embeddings_model,
+    baseline_data,
+    query,
+    success_threshold
+):
+    try:
+        response, similarity, status = _run_test(
+            test_llm_service, 
+            test_query_model, 
+            embeddings_service, 
+            embeddings_model,
+            baseline_data,
+            query,
+            success_threshold
+        )
+    except TypeError as e:
+        return {
+            "query": query,
+            "status": "failed",
+            "response": str(e),
+            "similarity": 0
+        }
+    else:
+        return {
+            "query": query,
+            "status": status,
+            "response": response,
+            "similarity": similarity
+        }
+
 
 def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings_model, baseline_data, query, success_threshold):
     # Find the corresponding baseline test data
