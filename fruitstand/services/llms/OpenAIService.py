@@ -1,8 +1,8 @@
 from openai import OpenAI
 
-from fruitstand.services.llms import LLMService
+from fruitstand.services.llms.LLMService import LLMService
 
-class OpenAIService:
+class OpenAIService(LLMService):
     def __init__(self, api_key):
         self._valid_models = [
             "gpt-4o",
