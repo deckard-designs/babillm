@@ -171,4 +171,3 @@ cython_debug/
 .pypirc
 
 private.README.md
-baselines
