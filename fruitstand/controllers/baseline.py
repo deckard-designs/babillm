@@ -42,21 +42,18 @@ def start(args):
         raise TypeError(f"{args.embeddings_model} is not a valid embeddings model for {embeddings_llm}")
     
     # Generate the baseline data
-    baseline_data = _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data)
+    baseline_data = asyncio.run(_generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data))
 
     # Output the baseline data to a file
     _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline_data, args.output_directory)
 
-def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data):
-    baseline_data = []
-
+async def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data):
     # Process each query in the input data
-    for query in data:
-        baseline_data.append(_run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query))
+    baseline_data = [ _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query) for query in data ]
     
-    return baseline_data
+    return await asyncio.gather(*baseline_data)
 
-def _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query):
+async def _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query):
     # Get the LLM response for the query
     llm_response = llm_service.query(query_model, query)
     # Get the embeddings for the LLM response
@@ -71,10 +68,10 @@ def _run_query_baseline(llm_service, query_model, embeddings_service, embeddings
 
 def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline, output_directory):
     # Create a filename for the output file
-    output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}__{str(datetime.now().timestamp())}.json"
-
+    output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}__{str(datetime.now().timestamp())}"
+    
     # Generate the full path for the output file
-    output_full_path = os.path.join(output_directory, file_utils.str_to_safe_filename(output_file))
+    output_full_path = os.path.join(output_directory, f"{file_utils.str_to_safe_filename(output_file)}.json")
 
     # Write the baseline data to the output file
     with open(output_full_path, "w") as file:
