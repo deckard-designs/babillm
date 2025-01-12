@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 
-from schemas import baseline_schema
+from schemas import generate_baseline_schema
 from factories import embeddings_factory, llm_factory
 from utils import file_utils
 
@@ -10,7 +10,7 @@ def start(args):
     with open(args.filename, 'r') as file:
         data = json.load(file)
         
-    baseline_schema.validate(data)
+    generate_baseline_schema.validate(data)
 
     query_llm = args.query_llm
     query_api_key = args.query_api_key
@@ -54,7 +54,7 @@ def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_
     return baseline_data
 
 def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline, output_directory):
-    output_file = f"{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}_{str(datetime.now().timestamp())}.json"
+    output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}_{str(datetime.now().timestamp())}.json"
 
     output_full_path = os.path.join(output_directory, file_utils.str_to_safe_filename(output_file))
 

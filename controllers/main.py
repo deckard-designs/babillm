@@ -1,7 +1,12 @@
-from controllers import baseline
+from controllers import baseline, test
 
 def start(command, args):
-    if command.lower() == "baseline":
+    normalized_command = command.lower()
+
+
+    if normalized_command == "baseline":
         baseline.start(args)
+    elif normalized_command == "test":
+        test.start(args)
     else:
         raise TypeError("Unknown command: " + command)
