@@ -47,7 +47,6 @@ def start(args):
                 query,
                 args.success_threshold
             )
-            print(response, similarity, status)
         except TypeError as e:
             test_responses.append({
                 "query": query,
