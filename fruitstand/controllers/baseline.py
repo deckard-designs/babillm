@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+import asyncio
 
 from fruitstand.schemas import generate_baseline_schema
 from fruitstand.factories import embeddings_factory, llm_factory
@@ -51,19 +52,22 @@ def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_
 
     # Process each query in the input data
     for query in data:
-        # Get the LLM response for the query
-        llm_response = llm_service.query(query_model, query)
-        # Get the embeddings for the LLM response
-        response_embeddings = embeddings_service.embed(embeddings_model, llm_response)
-
-        # Append the query, response, and embeddings to the baseline data
-        baseline_data.append({
-            "query": query,
-            "response": llm_response,
-            "vector": response_embeddings
-        })
+        baseline_data.append(_run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query))
     
     return baseline_data
+
+def _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query):
+    # Get the LLM response for the query
+    llm_response = llm_service.query(query_model, query)
+    # Get the embeddings for the LLM response
+    response_embeddings = embeddings_service.embed(embeddings_model, llm_response)
+
+    # Append the query, response, and embeddings to the baseline data
+    return {
+        "query": query,
+        "response": llm_response,
+        "vector": response_embeddings
+    }
 
 def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline, output_directory):
     # Create a filename for the output file
