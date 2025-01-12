@@ -2,9 +2,9 @@ from openai import OpenAI
 
 from services.llms import LLMService
 
-class OpenAIService(LLMService):
+class OpenAIService:
     def __init__(self, api_key):
-        self._valid_models = ["gpt-3.5 turbo"]
+        self._valid_models = ["gpt-4o-mini"]
         self.service = OpenAI(api_key=api_key)
 
     def validate_model(self, model):
@@ -20,5 +20,5 @@ class OpenAIService(LLMService):
             ],
             model=model,
         )
-
+        
         return chat_completion.choices[0].message.content

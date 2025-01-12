@@ -6,7 +6,7 @@ def getArgumentParser(command):
     if command.lower() == "baseline":
         parser.add_argument("-f", "--filename", dest="filename",
                             help="A file containing test data is required to generate an LLM baseline")
-        parser.add_argument("-o", "--output", dest="output",
+        parser.add_argument("-o", "--output", dest="output_directory",
                             help="An output location is required for the baseline data")
         parser.add_argument("-qllm", dest="query_llm",
                             help="An llm is required that you would like to generate a baseline queries for")

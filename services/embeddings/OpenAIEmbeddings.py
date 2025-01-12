@@ -11,10 +11,10 @@ class OpenAIEmbeddings(EmeddingsService):
         return model.lower() in self._valid_embeddings
 
     def embed(self, model, text):
-        embeddings = self.openai.Embedding.create(
-            model=model,  # Choose the model for embeddings
+        response = self.service.embeddings.create(
+            model=model,  # set the model for embeddings
             input=text
         )
 
         # Extract the embeddings from the response
-        return embeddings['data']
+        return response.data[0].embedding

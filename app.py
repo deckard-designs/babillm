@@ -1,11 +1,11 @@
 import sys
 
-from utils import arguments
+from utils import argument_utils
 from controllers import main
 
 command = sys.argv[1]
 
-parser = arguments.getArgumentParser(command)
+parser = argument_utils.getArgumentParser(command)
 
 args, unknown = parser.parse_known_args()
 
