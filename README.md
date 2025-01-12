@@ -1,9 +1,3 @@
-poetry run python3 app.py baseline /
--o ./baselines
--f ./test_data/test_data.json /
--qllm openai /
--qm gpt-4o-mini
--qkey
--ellm openai /
--em ext-embedding-3-large /
--ekey
+## Why is this library called Fruitstand?
+
+Because we’re comparing apples and oranges! Most testing involves checking that a value returned from a function is the same as what is expected. This doesn’t work when working with LLMs, as they are nondeterministic. Therefore, you need to check that there is a threshold of similarity.
