@@ -8,12 +8,14 @@ If you’re using a particular LLM model prompt to determine an action based on 
 
 For example, you are using an LLM to do intent detection for your chatbot. You have a prompt like this:
 
-```Based on the provided user prompt, determine if the user wanted to:
+```
+Based on the provided user prompt, determine if the user wanted to:
 1. Change their address
 2. Change their name
 3. Cancel their subscription
 
 User Prompt:
-I would like to update my subscription.```
+I would like to update my subscription.
+```
 
 Using fruitstand will ensure that the LLM routes to the correct intent as you upgrade/change your llm/model.
