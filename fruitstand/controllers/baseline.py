@@ -1,6 +1,7 @@
 import json
 import os
 import asyncio
+import logging
 from datetime import datetime
 
 from fruitstand.schemas import generate_baseline_schema
@@ -8,12 +9,18 @@ from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.utils import file_utils
 
 def start(args):
+    logging.info("Reading test data required for generating a baseline")
+
     # Open and read the input file
     with open(args.filename, 'r') as file:
         data = json.load(file)
         
+    logging.info("Validating test data")
+    
     # Validate the input data against the baseline schema
     generate_baseline_schema.validate(data)
+
+    logging.info("Retrieving LLM and embedding libraries")
 
     # Extract LLM query parameters from args
     query_llm = args.query_llm
@@ -41,11 +48,17 @@ def start(args):
     if not embeddings_supported_model:
         raise TypeError(f"{args.embeddings_model} is not a valid embeddings model for {embeddings_llm}")
     
+    logging.info("Generating baseline data")
+
     # Generate the baseline data
     baseline_data = asyncio.run(_generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data))
 
+    logging.info("Baseline generated")
+
     # Output the baseline data to a file
-    _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline_data, args.output_directory)
+    output_file = _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline_data, args.output_directory)
+
+    logging.info(f"Baseline data outputted to {output_file}")
 
 async def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data):
     # Process each query in the input data
@@ -86,3 +99,5 @@ def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, b
             },
             "data": baseline
         }, file, indent=4)
+
+    return output_full_path

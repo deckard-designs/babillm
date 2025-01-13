@@ -1,9 +1,12 @@
 import sys
+import logging
 
 from fruitstand.utils import argument_utils
 from fruitstand.controllers import main
 
 def start():
+    logging.basicConfig(level=logging.INFO)
+    
     command = sys.argv[1]
 
     parser = argument_utils.getArgumentParser(command)
