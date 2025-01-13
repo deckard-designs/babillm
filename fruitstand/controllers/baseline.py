@@ -8,45 +8,69 @@ from fruitstand.schemas import generate_baseline_schema
 from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.utils import file_utils
 
-def start(args):
+def start_filebased(
+    filename, 
+    query_llm, 
+    query_api_key, 
+    query_model, 
+    embeddings_llm, 
+    embeddings_api_key, 
+    embeddings_model,
+    output_directory
+):
     logging.info("Reading test data required for generating a baseline")
 
     # Open and read the input file
-    with open(args.filename, 'r') as file:
+    with open(filename, 'r') as file:
         data = json.load(file)
         
-    logging.info("Validating test data")
+    baseline_data = start(
+        query_llm, 
+        query_api_key, 
+        query_model, 
+        embeddings_llm, 
+        embeddings_api_key, 
+        embeddings_model,
+        data
+    )
+
+    # Output the baseline data to a file
+    output_file = _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline_data, output_directory)
+
+    logging.info(f"Baseline data outputted to {output_file}")
+
     
+def start( 
+    query_llm, 
+    query_api_key, 
+    query_model, 
+    embeddings_llm, 
+    embeddings_api_key, 
+    embeddings_model,
+    data
+):
+    logging.info("Validating test data")
+
     # Validate the input data against the baseline schema
     generate_baseline_schema.validate(data)
 
     logging.info("Retrieving LLM and embedding libraries")
 
-    # Extract LLM query parameters from args
-    query_llm = args.query_llm
-    query_api_key = args.query_api_key
-
     # Initialize the LLM service
     llm_service = llm_factory.getLLM(query_llm, query_api_key)
-    query_model = args.query_model
 
     # Validate the query model
     llm_supported_model = llm_service.validate_model(query_model)
     if not llm_supported_model:
-        raise TypeError(f"{args.query_model} is not a valid query model for {query_llm}")
-    
-    # Extract embeddings parameters from args
-    embeddings_llm = args.embeddings_llm
-    embeddings_api_key = args.embeddings_api_key
+        raise TypeError(f"{query_model} is not a valid query model for {query_llm}")
     
     # Initialize the embeddings service
     embeddings_service = embeddings_factory.getEmbeddings(embeddings_llm, embeddings_api_key)
-    embeddings_model = args.embeddings_model
 
     # Validate the embeddings model
     embeddings_supported_model = embeddings_service.validate_embeddings(embeddings_model)
     if not embeddings_supported_model:
-        raise TypeError(f"{args.embeddings_model} is not a valid embeddings model for {embeddings_llm}")
+        raise TypeError(f"{embeddings_model} is not a valid embeddings model for {embeddings_llm}")
     
     logging.info("Generating baseline data")
 
@@ -55,10 +79,7 @@ def start(args):
 
     logging.info("Baseline generated")
 
-    # Output the baseline data to a file
-    output_file = _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline_data, args.output_directory)
-
-    logging.info(f"Baseline data outputted to {output_file}")
+    return baseline_data
 
 async def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data):
     # Process each query in the input data

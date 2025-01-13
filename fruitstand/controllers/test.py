@@ -8,23 +8,61 @@ from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.schemas import baseline_schema, test_data_schema
 from fruitstand.utils import file_utils, vector_utils
 
-def start(args):
-    logging.info(f"Reading the existing baseline from {args.baseline_filename}")
+def start_filebased(
+    baseline_filename, 
+    test_filename, 
+    test_query_llm,
+    test_query_api_key,
+    test_query_model,
+    embeddings_api_key,
+    success_threshold,
+    output_directory
+):
+    logging.info(f"Reading the existing baseline from {baseline_filename}")
 
     # Load and validate baseline data
-    with open(args.baseline_filename, 'r') as file:
+    with open(baseline_filename, 'r') as file:
         baseline_data = json.load(file)
 
     logging.info("Validating baseline data")
     
     baseline_schema.validate(baseline_data)
 
-    logging.info(f"Reading the test data from from {args.test_filename}")
+    logging.info(f"Reading the test data from from {test_filename}")
 
     # Load and validate test data
-    with open(args.test_filename, 'r') as file:
+    with open(test_filename, 'r') as file:
         test_data = json.load(file)
 
+    test_responses = start(
+        test_query_llm,
+        test_query_api_key,
+        test_query_model,
+        embeddings_api_key,
+        success_threshold,
+        baseline_data,
+        test_data
+    )
+     
+    # Output test results
+    output_file = _output_results(
+        test_query_llm, 
+        test_query_model,
+        test_responses,
+        output_directory
+    )
+
+    logging.info(f"Test data outputted to {output_file}")
+
+def start(
+    test_query_llm,
+    test_query_api_key,
+    test_query_model,
+    embeddings_api_key,
+    success_threshold,
+    baseline_data,
+    test_data
+):
     logging.info("Validating test data")
     
     test_data_schema.validate(test_data)
@@ -34,16 +72,14 @@ def start(args):
     test_responses = []
 
     # Initialize LLM service and validate model
-    test_query_llm = args.query_llm
-    test_llm_service = llm_factory.getLLM(test_query_llm, args.query_api_key)
-    test_query_model = args.query_model
+    test_llm_service = llm_factory.getLLM(test_query_llm, test_query_api_key)
     llm_supported_model = test_llm_service.validate_model(test_query_model)
 
     if llm_supported_model == False:
         raise TypeError(f"{test_query_model} is not a valid query model for {test_query_llm}")
 
     # Initialize embeddings service and validate model
-    embeddings_service = embeddings_factory.getEmbeddings(baseline_data["embeddings"]["source"], args.embeddings_api_key)
+    embeddings_service = embeddings_factory.getEmbeddings(baseline_data["embeddings"]["source"], embeddings_api_key)
     embeddings_model = baseline_data["embeddings"]["model"]
 
     if llm_supported_model == False:
@@ -51,9 +87,7 @@ def start(args):
 
     logging.info("Running tests against baseline data")
 
-    success_threshold = args.success_threshold
-
-    logging.info(f"Success threshold: {args.success_threshold}")
+    logging.info(f"Success threshold: {success_threshold}")
 
     test_responses = asyncio.run(run_tests(
         test_llm_service, 
@@ -66,16 +100,8 @@ def start(args):
     ))
 
     logging.info(f"Tests complete!")
-           
-    # Output test results
-    output_file = _output_results(
-        test_query_llm, 
-        test_query_model,
-        test_responses,
-        args.output_directory
-    )
 
-    logging.info(f"Baseline data outputted to {output_file}")
+    return test_responses
 
 async def run_tests(
     test_llm_service, 
