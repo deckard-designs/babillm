@@ -1,6 +1,6 @@
 import logging
 
-from fruitstand.controllers import baseline
+from fruitstand.controllers import baseline, test
 
 class Fruitstand:
     def __init__(self):    
@@ -16,17 +16,35 @@ class Fruitstand:
         embeddings_llm, 
         embeddings_api_key, 
         embeddings_model,
-        output_directory
+        data
     ):
-        baseline.start(
-            filename, 
+        return baseline.start(
             query_llm, 
             query_api_key, 
             query_model, 
             embeddings_llm, 
             embeddings_api_key, 
             embeddings_model,
-            output_directory
+            data
+        )
+    
+    def test(
+        test_query_llm,
+        test_query_api_key,
+        test_query_model,
+        embeddings_api_key,
+        success_threshold,
+        baseline_data,
+        test_data
+    ):
+        return test.start(
+            test_query_llm,
+            test_query_api_key,
+            test_query_model,
+            embeddings_api_key,
+            success_threshold,
+            baseline_data,
+            test_data
         )
        
       
