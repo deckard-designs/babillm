@@ -1,6 +1,7 @@
 import os
 import json
 import asyncio
+import logging
 from datetime import datetime
 
 from fruitstand.factories import embeddings_factory, llm_factory
@@ -8,15 +9,27 @@ from fruitstand.schemas import baseline_schema, test_data_schema
 from fruitstand.utils import file_utils, vector_utils
 
 def start(args):
+    logging.info(f"Reading the existing baseline from {args.baseline_filename}")
+
     # Load and validate baseline data
     with open(args.baseline_filename, 'r') as file:
         baseline_data = json.load(file)
+
+    logging.info("Validating baseline data")
+    
     baseline_schema.validate(baseline_data)
+
+    logging.info(f"Reading the test data from from {args.test_filename}")
 
     # Load and validate test data
     with open(args.test_filename, 'r') as file:
         test_data = json.load(file)
+
+    logging.info("Validating test data")
+    
     test_data_schema.validate(test_data)
+
+    logging.info("Retrieving LLM and embedding libraries")
 
     test_responses = []
 
@@ -36,6 +49,12 @@ def start(args):
     if llm_supported_model == False:
         raise TypeError(f"{embeddings_model} is not a valid embeddings model for {embeddings_service}")
 
+    logging.info("Running tests against baseline data")
+
+    success_threshold = args.success_threshold
+
+    logging.info(f"Success threshold: {args.success_threshold}")
+
     test_responses = asyncio.run(run_tests(
         test_llm_service, 
         test_query_model, 
@@ -43,16 +62,20 @@ def start(args):
         embeddings_model,
         baseline_data,
         test_data,
-        args.success_threshold
+        success_threshold
     ))
+
+    logging.info(f"Tests complete!")
            
     # Output test results
-    _output_results(
+    output_file = _output_results(
         test_query_llm, 
         test_query_model,
         test_responses,
         args.output_directory
     )
+
+    logging.info(f"Baseline data outputted to {output_file}")
 
 async def run_tests(
     test_llm_service, 
@@ -97,19 +120,20 @@ async def _generate_test_results(
             success_threshold
         )
     except TypeError as e:
-        return {
-            "query": query,
-            "status": "failed",
-            "response": str(e),
-            "similarity": 0
-        }
+        status = "failed"
+        response = str(e)
+        similarity = 0
+
+        logging.error(f"Testing: {query}: (failed)")
     else:
-        return {
-            "query": query,
-            "status": status,
-            "response": response,
-            "similarity": similarity
-        }
+        logging.info(f"Testing: {query}: (passed) {similarity} similarity")
+    
+    return {
+        "query": query,
+        "status": status,
+        "response": response,
+        "similarity": similarity
+    }
 
 
 def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings_model, baseline_data, query, success_threshold):
@@ -151,3 +175,5 @@ def _output_results(query_llm, query_model, test_results, output_directory):
     # Write test results to the output file
     with open(output_full_path, "w") as file:
         json.dump(test_results, file, indent=4)
+
+    return output_full_path
