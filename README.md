@@ -19,3 +19,31 @@ I would like to update my subscription.
 ```
 
 Using fruitstand will ensure that the LLM routes to the correct intent as you upgrade/change your llm/model.
+
+# Running command line
+
+## Baseline
+
+### Arguments:
+
+• -f, --filename: File containing test data (required).
+• -o, --output: Directory to store baseline data (required).
+• -qllm: LLM to generate baseline queries for (required).
+• -qm, --model: Model for the query LLM (required).
+• -qkey: API key for querying the LLM (required).
+• -ellm: LLM for generating embeddings (required).
+• -em: Model for generating embeddings (required).
+• -ekey: API key for the embeddings LLM (required).
+
+## Test
+
+### Arguments:
+
+• -b, --baseline: File containing baseline data (required).
+• -f, --filename: File containing test data (required).
+• -o, --output: Directory to store test results (required).
+• -llm: LLM to run queries against (required).
+• -m, --model: Model for the query LLM (required).
+• -qkey: API key for querying the LLM (required).
+• -ekey: API key for the embeddings LLM (must match baseline’s embeddings LLM) (required).
+• -threshold: Similarity threshold to determine test success (required, float).
