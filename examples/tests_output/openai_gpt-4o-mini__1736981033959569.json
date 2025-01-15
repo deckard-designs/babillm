@@ -1,0 +1,14 @@
+[
+    {
+        "query": "How far is the earth from the sun?",
+        "status": "passed",
+        "response": "The average distance from the Earth to the Sun is about 93 million miles, or approximately 150 million kilometers. This distance is also referred to as 1 Astronomical Unit (AU), which is a standard measurement used in astronomy to describe distances within our solar system.",
+        "similarity": 0.96
+    },
+    {
+        "query": "Where is Manchester in the UK?",
+        "status": "passed",
+        "response": "Manchester is located in the northwest region of England, United Kingdom. It lies about 160 miles (257 kilometers) northwest of London and is part of Greater Manchester, a metropolitan county. The city is known for its rich industrial heritage, cultural scene, and as a major center for music and sports.",
+        "similarity": 0.97
+    }
+]
