@@ -1,12 +1,12 @@
 [project]
 name = "fruitstand"
-version = "0.4.0"
+version = "0.6.0"
 description = "A library for regression testing llm prompts"
 authors = [
     {name = "gareth@deckarddesigns.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13,<4"
+requires-python = ">=3.11,<4"
 dependencies = [
     "argparse (>=1.4.0,<2.0.0)",
     "openai (>=1.59.6,<2.0.0)",

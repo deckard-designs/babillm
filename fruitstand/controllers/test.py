@@ -3,21 +3,22 @@ import json
 import asyncio
 import logging
 from datetime import datetime
+from typing import List, Dict, Any
 
 from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.schemas import baseline_schema, test_data_schema
 from fruitstand.utils import file_utils, vector_utils
 
 def start_filebased(
-    baseline_filename, 
-    test_filename, 
-    test_query_llm,
-    test_query_api_key,
-    test_query_model,
-    embeddings_api_key,
-    success_threshold,
-    output_directory
-):
+    baseline_filename: str, 
+    test_filename: str, 
+    test_query_llm: str,
+    test_query_api_key: str,
+    test_query_model: str,
+    embeddings_api_key: str,
+    success_threshold: float,
+    output_directory: str
+) -> None:
     logging.info(f"Reading the existing baseline from {baseline_filename}")
 
     # Load and validate baseline data
@@ -55,14 +56,14 @@ def start_filebased(
     logging.info(f"Test data outputted to {output_file}")
 
 def start(
-    test_query_llm,
-    test_query_api_key,
-    test_query_model,
-    embeddings_api_key,
-    success_threshold,
-    baseline_data,
-    test_data
-):
+    test_query_llm: str,
+    test_query_api_key: str,
+    test_query_model: str,
+    embeddings_api_key: str,
+    success_threshold: float,
+    baseline_data: Dict[str, Any],
+    test_data: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
     logging.info("Validating test data")
     
     test_data_schema.validate(test_data)
@@ -97,14 +98,14 @@ def start(
     return test_responses
 
 async def run_tests(
-    test_llm_service, 
-    test_query_model, 
-    embeddings_service, 
-    embeddings_model,
-    baseline_data,
-    test_data,
-    success_threshold
-):
+    test_llm_service: Any, 
+    test_query_model: str, 
+    embeddings_service: Any, 
+    embeddings_model: str,
+    baseline_data: Dict[str, Any],
+    test_data: List[Dict[str, Any]],
+    success_threshold: float
+) -> List[Dict[str, Any]]:
     # Run tests for each query in test data
     test_results = [ _generate_test_results(
         test_llm_service, 
@@ -118,16 +119,15 @@ async def run_tests(
 
     return await asyncio.gather(*test_results)
 
-
 async def _generate_test_results(
-    test_llm_service, 
-    test_query_model, 
-    embeddings_service, 
-    embeddings_model,
-    baseline_data,
-    query,
-    success_threshold
-):
+    test_llm_service: Any, 
+    test_query_model: str, 
+    embeddings_service: Any, 
+    embeddings_model: str,
+    baseline_data: Dict[str, Any],
+    query: Dict[str, Any],
+    success_threshold: float
+) -> Dict[str, Any]:
     try:
         response, similarity, status = _run_test(
             test_llm_service, 
@@ -154,12 +154,19 @@ async def _generate_test_results(
         "similarity": similarity
     }
 
-
-def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings_model, baseline_data, query, success_threshold):
+def _run_test(
+    test_llm_service: Any, 
+    test_query_model: str, 
+    embeddings_service: Any, 
+    embeddings_model: str,
+    baseline_data: Dict[str, Any], 
+    query: Dict[str, Any], 
+    success_threshold: float
+) -> (str, float, str):
     # Find the corresponding baseline test data
     baseline_test = _find_baseline_test(query, baseline_data["data"])
 
-    if baseline_test != None:
+    if baseline_test is not None:
         # Query the LLM service and get the response
         response = test_llm_service.query(test_query_model, query)
 
@@ -177,8 +184,7 @@ def _run_test(test_llm_service, test_query_model, embeddings_service, embeddings
     else:
         raise TypeError("Cannot locate test data within baseline")
     
-
-def _find_baseline_test(test_query, baseline_data):
+def _find_baseline_test(test_query: Dict[str, Any], baseline_data: List[Dict[str, Any]]) -> Dict[str, Any]:
     # Search for the baseline test data that matches the query
     for data in baseline_data:
         if data["query"] == test_query:
@@ -186,7 +192,12 @@ def _find_baseline_test(test_query, baseline_data):
       
     return None
 
-def _output_results(query_llm, query_model, test_results, output_directory):
+def _output_results(
+    query_llm: str, 
+    query_model: str, 
+    test_results: List[Dict[str, Any]], 
+    output_directory: str
+) -> str:
     # Generate output file name and path
     output_file = f"{query_llm.lower()}_{query_model.lower()}__{str(datetime.now().timestamp())}"
     output_full_path = os.path.join(output_directory, f"{file_utils.str_to_safe_filename(output_file)}.json")
