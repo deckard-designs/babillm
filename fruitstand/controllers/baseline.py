@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 from fruitstand.schemas import generate_baseline_schema
 from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.utils import file_utils
-from fruitstand.services.embeddings import EmbeddingService
+from fruitstand.services.embeddings import EmbeddingsService
 
 def start_filebased(
     filename: str, 
@@ -79,7 +79,7 @@ async def _generate_baseline(llm_service: Any, query_model: str, embeddings_serv
     
     return await asyncio.gather(*baseline_data)
 
-async def _run_query_baseline(llm_service: Any, query_model: str, embeddings_service: EmbeddingService, embeddings_model: str, query: Dict[str, Any]) -> Dict[str, Any]:
+async def _run_query_baseline(llm_service: Any, query_model: str, embeddings_service: EmbeddingsService, embeddings_model: str, query: Dict[str, Any]) -> Dict[str, Any]:
     # Get the LLM response for the query
     llm_response = llm_service.query(query_model, query)
     # Get the embeddings for the LLM response

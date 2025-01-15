@@ -1,7 +1,7 @@
 from openai import OpenAI
-from fruitstand.services.embeddings.EmbeddingsService import EmeddingsService
+from fruitstand.services.embeddings.EmbeddingsService import EmbeddingsService
 
-class OpenAIEmbeddings(EmeddingsService):
+class OpenAIEmbeddings(EmbeddingsService):
     def __init__(self, api_key: str):
         self.service = OpenAI(api_key=api_key)
 
