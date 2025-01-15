@@ -71,7 +71,17 @@ def start(
 
     logging.info("Baseline generated")
 
-    return baseline_data
+    return {
+        "llm": {
+            "source": query_llm,
+            "model": query_model
+        },
+        "embeddings": {
+            "source": embeddings_llm,
+            "model": embeddings_model
+        },
+        "data": baseline_data
+    }
 
 async def _generate_baseline(llm_service: Any, query_model: str, embeddings_service: Any, embeddings_model: str, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     # Process each query in the input data
@@ -92,7 +102,7 @@ async def _run_query_baseline(llm_service: Any, query_model: str, embeddings_ser
         "vector": response_embeddings
     }
 
-def _output_baseline(query_llm: str, query_model: str, embeddings_llm: str, embeddings_model: str, baseline: List[Dict[str, Any]], output_directory: str) -> str:
+def _output_baseline(query_llm: str, query_model: str, embeddings_llm: str, embeddings_model: str, baseline: Dict[str, Any], output_directory: str) -> str:
     # Create a filename for the output file
     output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}__{str(datetime.now().timestamp())}"
     
@@ -101,16 +111,6 @@ def _output_baseline(query_llm: str, query_model: str, embeddings_llm: str, embe
 
     # Write the baseline data to the output file
     with open(output_full_path, "w") as file:
-        json.dump({
-            "llm": {
-                "source": query_llm,
-                "model": query_model
-            },
-            "embeddings": {
-                "source": embeddings_llm,
-                "model": embeddings_model
-            },
-            "data": baseline
-        }, file, indent=4)
+        json.dump(baseline, file, indent=4)
 
     return output_full_path
