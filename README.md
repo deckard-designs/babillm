@@ -17,7 +17,7 @@ Based on the provided user prompt, determine if the user wanted to:
 User Prompt:
 I would like to update my subscription.
 ```
-
+  
 Using fruitstand will ensure that the LLM routes to the correct intent as you upgrade/change your llm/model.
 
 # Running command line
