@@ -16,3 +16,6 @@ def start():
     args, unknown = parser.parse_known_args()
 
     main.start(command, args)
+
+if __name__ == "__main__":
+    start()

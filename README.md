@@ -41,6 +41,12 @@ Once you have your baseline, you can test other LLMs and models against it. Thes
 - -em: Model for generating embeddings (required).
 - -ekey: API key for the embeddings LLM (required).
 
+#### Example
+
+```
+fruitstand baseline -o ./baseline -f ./data/test_data.json -qllm openai -qm "gpt-4o-mini" -qkey sk-******** -ellm openai -em text-embedding-3-large -ekey sk--********
+```
+
 ### Test
 
 #### Arguments:
@@ -53,3 +59,9 @@ Once you have your baseline, you can test other LLMs and models against it. Thes
 - -qkey: API key for querying the LLM (required).
 - -ekey: API key for the embeddings LLM (must match baseline’s embeddings LLM) (required).
 - -threshold: Similarity threshold to determine test success (required, float).
+
+#### Example
+
+```
+fruitstand test -b .//baseline/baseline__openai_gpt-4o-mini__openai_text-embedding-3-large__1736980847061344.json -o ./test_results data -f ./data/test_data.json -llm openai -m "gpt-4o-mini" -qkey sk-******** -ekey sk--******** -threshold 0.85
+```
