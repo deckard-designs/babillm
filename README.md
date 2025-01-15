@@ -17,14 +17,20 @@ Based on the provided user prompt, determine if the user wanted to:
 User Prompt:
 I would like to update my subscription.
 ```
-  
+
 Using fruitstand will ensure that the LLM routes to the correct intent as you upgrade/change your llm/model.
 
-# Running command line
+# Using fruitstand
 
-## Baseline
+There are 2 steps to running tests using fruitstand. The first step is creating a baseline, this runs queries against a specific LLM and model. If you are currently using and LLM with a specific model, this should be your baseline. Creating a baseline will let you know that if you switch models, you can expect a similar response. Doing this immediately will also allow you to test for model degridation.
 
-### Arguments:
+Once you have your baseline, you can test other LLMs and models against it. These tests will allow you to know that you can switch models without any developed functionality from being negatively impacted.
+
+## Running command line
+
+### Baseline
+
+#### Arguments:
 
 - -f, --filename: File containing test data (required).
 - -o, --output: Directory to store baseline data (required).
@@ -35,9 +41,9 @@ Using fruitstand will ensure that the LLM routes to the correct intent as you up
 - -em: Model for generating embeddings (required).
 - -ekey: API key for the embeddings LLM (required).
 
-## Test
+### Test
 
-### Arguments:
+#### Arguments:
 
 - -b, --baseline: File containing baseline data (required).
 - -f, --filename: File containing test data (required).
