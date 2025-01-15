@@ -73,17 +73,10 @@ def start(
 
     # Initialize LLM service and validate model
     test_llm_service = llm_factory.getLLM(test_query_llm, test_query_api_key)
-    llm_supported_model = test_llm_service.validate_model(test_query_model)
-
-    if llm_supported_model == False:
-        raise TypeError(f"{test_query_model} is not a valid query model for {test_query_llm}")
 
     # Initialize embeddings service and validate model
     embeddings_service = embeddings_factory.getEmbeddings(baseline_data["embeddings"]["source"], embeddings_api_key)
     embeddings_model = baseline_data["embeddings"]["model"]
-
-    if llm_supported_model == False:
-        raise TypeError(f"{embeddings_model} is not a valid embeddings model for {embeddings_service}")
 
     logging.info("Running tests against baseline data")
 

@@ -1,6 +1,7 @@
 import numpy as np
+from typing import Union, List
 
-def cosine_similarity(vec1, vec2):
+def cosine_similarity(vec1: Union[List[float], np.ndarray], vec2: Union[List[float], np.ndarray]) -> float:
     # Convert the vectors to numpy arrays if they aren't already
     vec1 = np.array(vec1)
     vec2 = np.array(vec2)

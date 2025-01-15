@@ -3,21 +3,23 @@ import os
 import asyncio
 import logging
 from datetime import datetime
+from typing import List, Dict, Any
 
 from fruitstand.schemas import generate_baseline_schema
 from fruitstand.factories import embeddings_factory, llm_factory
 from fruitstand.utils import file_utils
+from fruitstand.services.embeddings import EmbeddingService
 
 def start_filebased(
-    filename, 
-    query_llm, 
-    query_api_key, 
-    query_model, 
-    embeddings_llm, 
-    embeddings_api_key, 
-    embeddings_model,
-    output_directory
-):
+    filename: str, 
+    query_llm: str, 
+    query_api_key: str, 
+    query_model: str, 
+    embeddings_llm: str, 
+    embeddings_api_key: str, 
+    embeddings_model: str,
+    output_directory: str
+) -> None:
     logging.info("Reading test data required for generating a baseline")
 
     # Open and read the input file
@@ -41,14 +43,14 @@ def start_filebased(
 
     
 def start( 
-    query_llm, 
-    query_api_key, 
-    query_model, 
-    embeddings_llm, 
-    embeddings_api_key, 
-    embeddings_model,
-    data
-):
+    query_llm: str, 
+    query_api_key: str, 
+    query_model: str, 
+    embeddings_llm: str, 
+    embeddings_api_key: str, 
+    embeddings_model: str,
+    data: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
     logging.info("Validating test data")
 
     # Validate the input data against the baseline schema
@@ -58,19 +60,9 @@ def start(
 
     # Initialize the LLM service
     llm_service = llm_factory.getLLM(query_llm, query_api_key)
-
-    # Validate the query model
-    llm_supported_model = llm_service.validate_model(query_model)
-    if not llm_supported_model:
-        raise TypeError(f"{query_model} is not a valid query model for {query_llm}")
     
     # Initialize the embeddings service
     embeddings_service = embeddings_factory.getEmbeddings(embeddings_llm, embeddings_api_key)
-
-    # Validate the embeddings model
-    embeddings_supported_model = embeddings_service.validate_embeddings(embeddings_model)
-    if not embeddings_supported_model:
-        raise TypeError(f"{embeddings_model} is not a valid embeddings model for {embeddings_llm}")
     
     logging.info("Generating baseline data")
 
@@ -81,13 +73,13 @@ def start(
 
     return baseline_data
 
-async def _generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data):
+async def _generate_baseline(llm_service: Any, query_model: str, embeddings_service: Any, embeddings_model: str, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     # Process each query in the input data
     baseline_data = [ _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query) for query in data ]
     
     return await asyncio.gather(*baseline_data)
 
-async def _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query):
+async def _run_query_baseline(llm_service: Any, query_model: str, embeddings_service: EmbeddingService, embeddings_model: str, query: Dict[str, Any]) -> Dict[str, Any]:
     # Get the LLM response for the query
     llm_response = llm_service.query(query_model, query)
     # Get the embeddings for the LLM response
@@ -100,7 +92,7 @@ async def _run_query_baseline(llm_service, query_model, embeddings_service, embe
         "vector": response_embeddings
     }
 
-def _output_baseline(query_llm, query_model, embeddings_llm, embeddings_model, baseline, output_directory):
+def _output_baseline(query_llm: str, query_model: str, embeddings_llm: str, embeddings_model: str, baseline: List[Dict[str, Any]], output_directory: str) -> str:
     # Create a filename for the output file
     output_file = f"baseline__{query_llm.lower()}_{query_model.lower()}__{embeddings_llm.lower()}_{embeddings_model.lower()}__{str(datetime.now().timestamp())}"
     

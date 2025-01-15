@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
-class EmeddingsService(ABC):
+class EmbeddingsService(ABC):
     @abstractmethod
-    def validate_embeddings(self, model):
-        pass
-
-    @abstractmethod
-    def embed(self, model, text):
+    def embed(self, model: Any, text: str) -> list:
         pass

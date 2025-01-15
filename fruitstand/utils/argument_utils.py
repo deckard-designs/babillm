@@ -1,6 +1,6 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 
-def getArgumentParser(command):
+def getArgumentParser(command: str) -> ArgumentParser:
     parser = ArgumentParser()
 
     normalized_command = command.lower()

@@ -1,6 +1,20 @@
 from fruitstand.controllers import baseline, test
+from typing import Any
 
-def start(command, args):
+class Args:
+    filename: str
+    query_llm: str
+    query_api_key: str
+    query_model: str
+    embeddings_llm: str
+    embeddings_api_key: str
+    embeddings_model: str
+    output_directory: str
+    baseline_filename: str
+    test_filename: str
+    success_threshold: float
+
+def start(command: str, args: Args) -> None:
     normalized_command = command.lower()
 
     if normalized_command == "baseline":

@@ -1,6 +1,6 @@
 import re
 
-def str_to_safe_filename(original_string):
+def str_to_safe_filename(original_string: str) -> str:
     # Replace spaces with underscores or hyphens (choose one)
     safe_string = original_string.replace(" ", "_")  # or use .replace(" ", "-")
 
