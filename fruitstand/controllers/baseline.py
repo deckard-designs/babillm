@@ -24,7 +24,7 @@ def start_filebased(
 
     # Open and read the input file
     with open(filename, 'r') as file:
-        data = json.load(file)
+        test_data = json.load(file)
         
     baseline_data = start(
         query_llm, 
@@ -33,7 +33,7 @@ def start_filebased(
         embeddings_llm, 
         embeddings_api_key, 
         embeddings_model,
-        data
+        test_data
     )
 
     # Output the baseline data to a file
@@ -49,12 +49,12 @@ def start(
     embeddings_llm: str, 
     embeddings_api_key: str, 
     embeddings_model: str,
-    data: List[Dict[str, Any]]
+    test_data: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
     logging.info("Validating test data")
 
     # Validate the input data against the baseline schema
-    generate_baseline_schema.validate(data)
+    generate_baseline_schema.validate(test_data)
 
     logging.info("Retrieving LLM and embedding libraries")
 
@@ -67,7 +67,7 @@ def start(
     logging.info("Generating baseline data")
 
     # Generate the baseline data
-    baseline_data = asyncio.run(_generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, data))
+    baseline_data = asyncio.run(_generate_baseline(llm_service, query_model, embeddings_service, embeddings_model, test_data))
 
     logging.info("Baseline generated")
 
@@ -83,9 +83,9 @@ def start(
         "data": baseline_data
     }
 
-async def _generate_baseline(llm_service: Any, query_model: str, embeddings_service: Any, embeddings_model: str, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+async def _generate_baseline(llm_service: Any, query_model: str, embeddings_service: Any, embeddings_model: str, test_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     # Process each query in the input data
-    baseline_data = [ _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query) for query in data ]
+    baseline_data = [ _run_query_baseline(llm_service, query_model, embeddings_service, embeddings_model, query) for query in test_data ]
     
     return await asyncio.gather(*baseline_data)
 

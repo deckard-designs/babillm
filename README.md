@@ -28,6 +28,14 @@ Once you have your baseline, you can test other LLMs and models against it. Thes
 
 ## Running Fruitstand via Command Line
 
+## Test data
+
+You can pass test data for baselining or testing either through the command line using a file or through the Fruitstand module using the test_data argument. In both cases, the data should be a JSON array of strings, for example:
+
+```
+["How far is the earth from the sun?", "Where is Manchester in the UK?"]
+```
+
 ### Baseline
 
 #### Arguments:
@@ -86,7 +94,7 @@ baseline_data = fruitstand.baseline(
     embeddings_llm="openai",
     embeddings_api_key=openai_api_key,
     embeddings_model="text-embedding-3-large",
-    data=[
+    test_data=[
         "How far is the earth from the sun?",
         "Where is Manchester in the UK?"
     ]

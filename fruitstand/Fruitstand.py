@@ -17,7 +17,7 @@ class Fruitstand:
         embeddings_llm: str, 
         embeddings_api_key: str, 
         embeddings_model: str,
-        data: List[Dict[str, Any]]
+        test_data: List[Dict[str, Any]]
     ) -> dict:
         return baseline.start(
             query_llm, 
@@ -26,7 +26,7 @@ class Fruitstand:
             embeddings_llm, 
             embeddings_api_key, 
             embeddings_model,
-            data
+            test_data
         )
     
     def test(
