@@ -20,6 +20,13 @@ I would like to update my subscription.
 
 Using fruitstand will ensure that the LLM routes to the correct intent as you upgrade/change your llm/model.
 
+#Installation
+
+```
+# install from PyPI
+pip install fruitstand
+```
+
 # Using fruitstand
 
 There are two steps to running tests using Fruitstand. The first step is creating a baseline, which runs queries against a specific LLM and model. If you are currently using an LLM with a specific model, this should be your baseline. Creating a baseline allows you to ensure that if you switch models, you can expect similar responses. Doing this promptly will also help you test for model degradation.
