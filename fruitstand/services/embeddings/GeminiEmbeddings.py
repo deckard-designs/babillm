@@ -7,8 +7,9 @@ class GeminiEmbeddings(EmbeddingsService):
 
     def embed(self, model: str, text: str) -> list:
         response = genai.embed_content(
-        model=model,
-        content=text)
+          model=model,
+          content=text
+        )
 
         # Extract the embeddings from the response
-        return response.data[0].embedding
+        return response["embedding"]
