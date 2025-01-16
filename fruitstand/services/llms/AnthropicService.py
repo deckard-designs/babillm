@@ -7,13 +7,14 @@ class AnthropicService(LLMService):
     
     def query(self, model: str, text: str) -> str:
         chat_completion = self.service.messages.create(
+            model=model,
+            max_tokens=1024,
             messages=[
                 {
                     "role": "user",
                     "content": text
                 }
             ],
-            model=model,
         )
-        
+
         return chat_completion.content[0].text

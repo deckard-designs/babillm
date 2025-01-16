@@ -1,4 +1,4 @@
-from fruitstand.services.llms import AnthropicService
+from fruitstand.services.llms.AnthropicService import AnthropicService
 from fruitstand.services.llms.OpenAIService import OpenAIService
 
 def getLLM(llm: str, api_key: str) -> OpenAIService:
