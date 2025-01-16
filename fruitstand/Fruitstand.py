@@ -34,7 +34,7 @@ class Fruitstand:
         test_query_llm: str,
         test_query_api_key: str,
         test_query_model: str,
-        embeddings_api_key: str,
+        baseline_embeddings_api_key: str,
         success_threshold: float,
         baseline_data: dict,
         test_data: List[Dict[str, Any]]
@@ -43,7 +43,7 @@ class Fruitstand:
             test_query_llm,
             test_query_api_key,
             test_query_model,
-            embeddings_api_key,
+            baseline_embeddings_api_key,
             success_threshold,
             baseline_data,
             test_data
