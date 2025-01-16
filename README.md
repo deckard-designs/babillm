@@ -26,7 +26,7 @@ There are two steps to running tests using Fruitstand. The first step is creatin
 
 Once you have your baseline, you can test other LLMs and models against it. These tests will ensure that you can switch models without negatively impacting any developed functionality.
 
-## Running through command line
+## Running Fruitstand via Command Line
 
 ### Baseline
 
@@ -64,4 +64,52 @@ fruitstand baseline -o ./baseline -f ./data/test_data.json -qllm openai -qm "gpt
 
 ```
 fruitstand test -b ./baseline/baseline__openai_gpt-4o-mini__openai_text-embedding-3-large__1736980847061344.json -o ./test_results data -f ./data/test_data.json -llm openai -m "gpt-4o-mini" -qkey sk-******** -ekey sk--******** -threshold 0.85
+```
+
+## Example Usage in Python
+
+Below is an example of how to use the Fruitstand library directly in Python to create a baseline and run tests.
+
+### Creating a Baseline
+
+```
+from fruitstand import Fruitstand
+
+fruitstand = Fruitstand()
+
+openai_api_key = "your_openai_api_key"
+
+baseline_data = fruitstand.baseline(
+    query_llm="openai",
+    query_api_key=openai_api_key,
+    query_model="gpt-4o-mini",
+    embeddings_llm="openai",
+    embeddings_api_key=openai_api_key,
+    embeddings_model="text-embedding-3-large",
+    data=[
+        "How far is the earth from the sun?",
+        "Where is Manchester in the UK?"
+    ]
+)
+
+print("Baseline data:", baseline_data)
+```
+
+### Running Tests
+
+```
+test_data = fruitstand.test(
+    test_query_llm="openai",
+    test_query_api_key=openai_api_key,
+    test_query_model="gpt-4o-mini",
+    embeddings_api_key=openai_api_key,
+    baseline_data=baseline_data,
+    test_data=[
+        "How far is the earth from the sun?",
+        "Where is Manchester in the UK?"
+    ],
+    success_threshold=0.85
+)
+
+print("Test data:", test_data)
 ```
