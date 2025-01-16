@@ -35,7 +35,7 @@ def getArgumentParser(command: str) -> ArgumentParser:
                             help="The model that for the llm that you would like to run queries against")
         parser.add_argument("-qkey", dest="query_api_key", required=True,
                             help="The api key for the llm you would like to use for querying")
-        parser.add_argument("-ekey", dest="embeddings_api_key", required=True,
+        parser.add_argument("-ekey", dest="baseline_embeddings_api_key", required=True,
                             help="The api key for the llm you would like to use for embeddings, this must be the same llm and model as used in the baseline")
         parser.add_argument("-threshold", type=float, dest="success_threshold", required=True,
                             help="The threshold of similarity that determine the test passes")

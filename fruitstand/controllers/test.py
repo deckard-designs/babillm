@@ -15,7 +15,7 @@ def start_filebased(
     test_query_llm: str,
     test_query_api_key: str,
     test_query_model: str,
-    embeddings_api_key: str,
+    baseline_embeddings_api_key: str,
     success_threshold: float,
     output_directory: str
 ) -> None:
@@ -39,7 +39,7 @@ def start_filebased(
         test_query_llm,
         test_query_api_key,
         test_query_model,
-        embeddings_api_key,
+        baseline_embeddings_api_key,
         success_threshold,
         baseline_data,
         test_data
@@ -59,7 +59,7 @@ def start(
     test_query_llm: str,
     test_query_api_key: str,
     test_query_model: str,
-    embeddings_api_key: str,
+    baseline_embeddings_api_key: str,
     success_threshold: float,
     baseline_data: Dict[str, Any],
     test_data: List[Dict[str, Any]]
@@ -76,7 +76,7 @@ def start(
     test_llm_service = llm_factory.getLLM(test_query_llm, test_query_api_key)
 
     # Initialize embeddings service and validate model
-    embeddings_service = embeddings_factory.getEmbeddings(baseline_data["embeddings"]["source"], embeddings_api_key)
+    embeddings_service = embeddings_factory.getEmbeddings(baseline_data["embeddings"]["source"], baseline_embeddings_api_key)
     embeddings_model = baseline_data["embeddings"]["model"]
 
     logging.info("Running tests against baseline data")

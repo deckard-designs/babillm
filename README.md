@@ -102,7 +102,7 @@ test_data = fruitstand.test(
     test_query_llm="openai",
     test_query_api_key=openai_api_key,
     test_query_model="gpt-4o-mini",
-    embeddings_api_key=openai_api_key,
+    baseline_embeddings_api_key=openai_api_key,
     baseline_data=baseline_data,
     test_data=[
         "How far is the earth from the sun?",
