@@ -145,7 +145,7 @@ async def _generate_test_results(
 
         logging.error(f"Testing: {query}: (failed)")
     else:
-        logging.info(f"Testing: {query}: (passed) {similarity} similarity")
+        logging.info(f"Testing: {query}: {status} {similarity} similarity")
     
     return {
         "query": query,

@@ -1,0 +1,14 @@
+[
+    {
+        "query": "How far is the earth from the sun?",
+        "status": "passed",
+        "response": "The Earth's distance from the sun is not constant because its orbit is elliptical.  The average distance is about **93 million miles** (149.6 million kilometers). This average distance is also known as one astronomical unit (AU).\n",
+        "similarity": 0.88
+    },
+    {
+        "query": "Where is Manchester in the UK?",
+        "status": "failed",
+        "response": "Manchester is in **North West England**.\n",
+        "similarity": 0.66
+    }
+]
