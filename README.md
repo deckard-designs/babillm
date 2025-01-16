@@ -57,7 +57,7 @@ fruitstand baseline -o ./baseline -f ./data/test_data.json -qllm openai -qm "gpt
 - -llm: LLM to run queries against (required). # 'openai' | 'anthropic' | 'gemini'
 - -m, --model: Model for the query LLM (required). # e.g. 'gpt-4o-mini'
 - -qkey: API key for querying the LLM (required).
-- -ekey: API key for the embeddings LLM (must match baseline’s embeddings LLM) (required).
+- -ekey: API key used to generate the baseline’s embeddings (required).
 - -threshold: Similarity threshold to determine test success (required, float).
 
 #### Example
