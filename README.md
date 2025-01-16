@@ -34,10 +34,10 @@ Once you have your baseline, you can test other LLMs and models against it. Thes
 
 - -f, --filename: File containing test data (required).
 - -o, --output: Directory to store baseline data (required).
-- -qllm: LLM to generate baseline queries for (required). # 'openai' | 'claude'| 'gemini'
+- -qllm: LLM to generate baseline queries for (required). # 'openai' | 'anthropic'| 'gemini'
 - -qm, --model: Model for the query LLM (required). e.g. 'gpt-4o-mini'
 - -qkey: API key for querying the LLM (required).
-- -ellm: LLM for generating embeddings (required). # 'openai' | 'claude' | 'gemini'
+- -ellm: LLM for generating embeddings (required). # 'openai' | 'gemini'
 - -em: Model for generating embeddings (required). # e.g. 'text-embedding-3-large'
 - -ekey: API key for the embeddings LLM (required).
 
@@ -54,7 +54,7 @@ fruitstand baseline -o ./baseline -f ./data/test_data.json -qllm openai -qm "gpt
 - -b, --baseline: File containing baseline data (required).
 - -f, --filename: File containing test data (required).
 - -o, --output: Directory to store test results (required).
-- -llm: LLM to run queries against (required). # 'openai' | 'claude' | 'gemini'
+- -llm: LLM to run queries against (required). # 'openai' | 'anthropic' | 'gemini'
 - -m, --model: Model for the query LLM (required). # e.g. 'gpt-4o-mini'
 - -qkey: API key for querying the LLM (required).
 - -ekey: API key for the embeddings LLM (must match baseline’s embeddings LLM) (required).
