@@ -22,11 +22,11 @@ Using fruitstand will ensure that the LLM routes to the correct intent as you up
 
 # Using fruitstand
 
-There are 2 steps to running tests using fruitstand. The first step is creating a baseline, this runs queries against a specific LLM and model. If you are currently using and LLM with a specific model, this should be your baseline. Creating a baseline will let you know that if you switch models, you can expect a similar response. Doing this immediately will also allow you to test for model degridation.
+There are two steps to running tests using Fruitstand. The first step is creating a baseline, which runs queries against a specific LLM and model. If you are currently using an LLM with a specific model, this should be your baseline. Creating a baseline allows you to ensure that if you switch models, you can expect similar responses. Doing this promptly will also help you test for model degradation.
 
-Once you have your baseline, you can test other LLMs and models against it. These tests will allow you to know that you can switch models without any developed functionality from being negatively impacted.
+Once you have your baseline, you can test other LLMs and models against it. These tests will ensure that you can switch models without negatively impacting any developed functionality.
 
-## Running command line
+## Running through command line
 
 ### Baseline
 
@@ -34,11 +34,11 @@ Once you have your baseline, you can test other LLMs and models against it. Thes
 
 - -f, --filename: File containing test data (required).
 - -o, --output: Directory to store baseline data (required).
-- -qllm: LLM to generate baseline queries for (required).
-- -qm, --model: Model for the query LLM (required).
+- -qllm: LLM to generate baseline queries for (required). # 'openai' | 'claude'| 'gemini'
+- -qm, --model: Model for the query LLM (required). e.g. 'gpt-4o-mini'
 - -qkey: API key for querying the LLM (required).
-- -ellm: LLM for generating embeddings (required).
-- -em: Model for generating embeddings (required).
+- -ellm: LLM for generating embeddings (required). # 'openai' | 'claude' | 'gemini'
+- -em: Model for generating embeddings (required). # e.g. 'text-embedding-3-large'
 - -ekey: API key for the embeddings LLM (required).
 
 #### Example
@@ -54,8 +54,8 @@ fruitstand baseline -o ./baseline -f ./data/test_data.json -qllm openai -qm "gpt
 - -b, --baseline: File containing baseline data (required).
 - -f, --filename: File containing test data (required).
 - -o, --output: Directory to store test results (required).
-- -llm: LLM to run queries against (required).
-- -m, --model: Model for the query LLM (required).
+- -llm: LLM to run queries against (required). # 'openai' | 'claude' | 'gemini'
+- -m, --model: Model for the query LLM (required). # e.g. 'gpt-4o-mini'
 - -qkey: API key for querying the LLM (required).
 - -ekey: API key for the embeddings LLM (must match baseline’s embeddings LLM) (required).
 - -threshold: Similarity threshold to determine test success (required, float).
