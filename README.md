@@ -121,3 +121,31 @@ test_data = fruitstand.test(
 
 print("Test data:", test_data)
 ```
+
+## Results
+
+Once the tests have run, a results JSON is returned. If run through the command line, the results will be saved in the specified location, and if run through the module, they will be return in memory. The JSON will look as follows:
+
+```
+[
+    {
+        "query": "How far is the earth from the sun?",
+        "response": "The Earth's distance from the sun is not constant because its orbit is elliptical.  The average distance is about **93 million miles** (149.6 million kilometers). This average distance is also known as one astronomical unit (AU).\n",
+        "status": "passed",
+        "similarity": 0.88
+    },
+    {
+        "query": "Where is Manchester in the UK?",
+        "response": "Manchester is in **North West England**.\n",
+        "status": "failed",
+        "similarity": 0.66
+    }
+]
+```
+
+These are as follows:
+
+- query: The query that was passed to the LLM being tested.
+- response: The response from the LLM being tested.
+- status: Indicates whether the test passed or failed. This depends on whether the similarity of the response from the tested LLM meets the success_threshold provided.
+- similarity: The similarity of the response from the tested LLM to the baseline LLM.

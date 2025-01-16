@@ -149,8 +149,8 @@ async def _generate_test_results(
     
     return {
         "query": query,
-        "status": status,
         "response": response,
+        "status": status,
         "similarity": similarity
     }
 
